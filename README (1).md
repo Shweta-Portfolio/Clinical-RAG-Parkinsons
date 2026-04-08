@@ -2,13 +2,13 @@
 
 A Retrieval-Augmented Generation (RAG) system for clinical question-answering over neurodegenerative disease research literature. Built as a demonstration of applied clinical NLP skills for doctoral research in clinical data science.
 
----
+
 
 ## Motivation
 
 Clinical research teams working with large volumes of biomedical literature face significant challenges in retrieving disease-specific evidence efficiently. Manually searching and synthesising hundreds of abstracts is time-consuming and prone to gaps.
 
-This pipeline demonstrates how RAG architectures can support **evidence-based clinical question answering** — directly relevant to clinical data science research in neurodegenerative diseases such as Parkinson's and Alzheimer's. It is designed with scalability in mind: the same architecture applies to patient-level EHR text, discharge summaries, and structured clinical databases.
+This pipeline demonstrates how RAG architectures can support **evidence-based clinical question answering**  directly relevant to clinical data science research in neurodegenerative diseases such as Parkinson's and Alzheimer's. It is designed with scalability in mind: the same architecture applies to patient-level EHR text, discharge summaries, and structured clinical databases.
 
 ---
 
@@ -44,23 +44,23 @@ Cited, source-grounded clinical answer
   - `Alzheimer's disease clinical data harmonisation OMOP`
 - **Corpus size:** 500+ unique abstracts after deduplication by PMID
 - **Metadata retained:** PMID, title, publication year, source query
-- **No proprietary or patient-level data used** — fully open and reproducible
+- **No proprietary or patient-level data used** fully open and reproducible
 
 ---
 
 ## Key Design Decisions
 
 ### Embedding model: Bio_ClinicalBERT
-`emilyalsentzer/Bio_ClinicalBERT` was chosen over general-purpose sentence transformers (e.g. `all-MiniLM-L6-v2`) because it was pre-trained on MIMIC-III clinical notes. This gives it substantially better semantic alignment with medical terminology, clinical abbreviations, and disease-specific language — critical for meaningful retrieval over biomedical text.
+`emilyalsentzer/Bio_ClinicalBERT` was chosen over general-purpose sentence transformers (e.g. `all-MiniLM-L6-v2`) because it was pre-trained on MIMIC-III clinical notes. This gives it substantially better semantic alignment with medical terminology, clinical abbreviations, and disease-specific language critical for meaningful retrieval over biomedical text.
 
 ### Chunking strategy
-`RecursiveCharacterTextSplitter` with `chunk_size=400` and `chunk_overlap=50` tokens. The overlap is deliberately set to preserve clinical context across sentence boundaries — a sentence describing a biomarker finding may be semantically incomplete without the preceding sentence establishing the patient cohort.
+`RecursiveCharacterTextSplitter` with `chunk_size=400` and `chunk_overlap=50` tokens. The overlap is deliberately set to preserve clinical context across sentence boundaries a sentence describing a biomarker finding may be semantically incomplete without the preceding sentence establishing the patient cohort.
 
 ### Vector store: ChromaDB with cosine similarity
-Cosine similarity is used as the distance metric rather than Euclidean distance, as it is invariant to embedding magnitude — more appropriate for comparing normalised sentence-level representations.
+Cosine similarity is used as the distance metric rather than Euclidean distance, as it is invariant to embedding magnitude more appropriate for comparing normalised sentence-level representations.
 
 ### LLM: LLaMA 3.1 8B via Groq (temperature=0.1)
-Temperature is set to 0.1 to prioritise factual grounding over generative creativity. The system prompt instructs the model to answer only from provided context and to cite PMIDs — reducing hallucination risk in clinical contexts.
+Temperature is set to 0.1 to prioritise factual grounding over generative creativity. The system prompt instructs the model to answer only from provided context and to cite PMIDs reducing hallucination risk in clinical contexts.
 
 ### Retrieval: top-5 chunks per query
 Evaluated at k=1, k=3, and k=5. Top-5 balances context richness with prompt length constraints.
@@ -93,7 +93,7 @@ Retrieval quality assessed using average cosine similarity at k=1, 3, and 5 acro
 
 > *Fill in your similarity scores from the evaluation cell output before pushing to GitHub.*
 
-A query semantic similarity heatmap is included (`query_similarity_heatmap.png`) showing the degree of semantic overlap between evaluation queries — useful for identifying redundancy in query design.
+A query semantic similarity heatmap is included (`query_similarity_heatmap.png`) showing the degree of semantic overlap between evaluation queries useful for identifying redundancy in query design.
 
 ---
 
@@ -110,7 +110,7 @@ A query semantic similarity heatmap is included (`query_similarity_heatmap.png`)
 
 ```
 clinical-rag-parkinsons/
-├── clinical_rag_parkinsons.ipynb   # Main notebook — full pipeline end to end
+├── clinical_rag_parkinsons.ipynb   # Main notebook full pipeline end to end
 ├── parkinsons_abstracts.csv        # Fetched and cleaned PubMed corpus
 ├── abstracts_by_year.png           # Corpus year distribution plot
 ├── query_similarity_heatmap.png    # Query embedding similarity heatmap
@@ -163,17 +163,17 @@ seaborn
 
 ## Limitations & Next Steps
 
-- **Data scope:** Currently limited to PubMed abstracts. The next step is extending to **MIMIC-III discharge summaries** (PhysioNet access in progress) for patient-level unstructured clinical text — moving from literature retrieval to patient-level clinical question answering.
-- **Structured data integration:** Planned integration with **OMOP CDM**-mapped structured variables alongside unstructured text, enabling hybrid retrieval across both modalities.
-- **Federated retrieval:** Future direction — extending the ChromaDB retrieval layer to operate across distributed document stores in a privacy-preserving manner, aligned with federated learning principles for multi-site clinical data.
-- **Evaluation:** Similarity-based retrieval evaluation is a proxy metric. Ground-truth QA evaluation (e.g. using BioASQ benchmarks) is a planned next step.
+- **Data scope:** Currently limited to PubMed abstracts. The next step is extending to **MIMIC-III discharge summaries** (PhysioNet access in progress) for patient level unstructured clinical text moving from literature retrieval to patient-level clinical question answering.
+- **Structured data integration:** Planned integration with **OMOP CDM** mapped structured variables alongside unstructured text, enabling hybrid retrieval across both modalities.
+- **Federated retrieval:** Future direction extending the ChromaDB retrieval layer to operate across distributed document stores in a privacy preserving manner, aligned with federated learning principles for multi-site clinical data.
+- **Evaluation:** Similarity-based retrieval evaluation is a proxy metric. Ground truth QA evaluation (e.g. using BioASQ benchmarks) is a planned next step.
 - **Embedding model:** Bio_ClinicalBERT is an older BERT-based model. Replacing with `MedCPT` or `BioMedBERT-large` would likely improve retrieval quality for longer queries.
 
 ---
 
 ## Relevance to Doctoral Research
 
-This project was built as a practical demonstration of skills directly relevant to doctoral research in clinical data science — specifically the integration of NLP pipelines, semantic retrieval, and LLM-based generation over biomedical text. The architecture is designed to generalise to the kinds of clinical data environments described in LCSB's work: multimodal, heterogeneous, and requiring FAIR-compliant, privacy-aware processing.
+This project was built as a practical demonstration of skills directly relevant to doctoral research in clinical data science specifically the integration of NLP pipelines, semantic retrieval, and LLM-based generation over biomedical text. The architecture is designed to generalise to the kinds of clinical data environments described in LCSB's work: multimodal, heterogeneous, and requiring FAIR-compliant, privacy aware processing.
 
 ---
 
