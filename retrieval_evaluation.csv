@@ -1,0 +1,16 @@
+query,avg_similarity@1,avg_similarity@3,avg_similarity@5
+What machine learning methods have been used to predict Park...,0.9348,,
+What machine learning methods have been used to predict Park...,,0.9327,
+What machine learning methods have been used to predict Park...,,,0.932
+How have NLP techniques been applied to clinical notes for P...,0.9396,,
+How have NLP techniques been applied to clinical notes for P...,,0.9384,
+How have NLP techniques been applied to clinical notes for P...,,,0.9366
+What biomarkers are used for early detection of Parkinson's ...,0.938,,
+What biomarkers are used for early detection of Parkinson's ...,,0.9362,
+What biomarkers are used for early detection of Parkinson's ...,,,0.9337
+How is multimodal data integrated for Alzheimer's disease re...,0.9445,,
+How is multimodal data integrated for Alzheimer's disease re...,,0.9441,
+How is multimodal data integrated for Alzheimer's disease re...,,,0.9435
+What are the challenges of harmonising clinical data across ...,0.949,,
+What are the challenges of harmonising clinical data across ...,,0.945,
+What are the challenges of harmonising clinical data across ...,,,0.9438
