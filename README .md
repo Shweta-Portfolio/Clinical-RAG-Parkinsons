@@ -1,14 +1,14 @@
 # Clinical RAG Pipeline — Parkinson's & Alzheimer's Literature
 
-A Retrieval-Augmented Generation (RAG) system for clinical question-answering over neurodegenerative disease research literature. Built as a demonstration of applied clinical NLP skills for doctoral research in clinical data science.
+A Retrieval-Augmented Generation (RAG) system for clinical question answering over neurodegenerative disease research literature. Built as a demonstration of applied clinical NLP skills for doctoral research in clinical data science.
 
-
+---
 
 ## Motivation
 
 Clinical research teams working with large volumes of biomedical literature face significant challenges in retrieving disease-specific evidence efficiently. Manually searching and synthesising hundreds of abstracts is time-consuming and prone to gaps.
 
-This pipeline demonstrates how RAG architectures can support **evidence-based clinical question answering**  directly relevant to clinical data science research in neurodegenerative diseases such as Parkinson's and Alzheimer's. It is designed with scalability in mind: the same architecture applies to patient-level EHR text, discharge summaries, and structured clinical databases.
+This pipeline demonstrates how RAG architectures can support evidence-based clinical question answering directly relevant to clinical data science research in neurodegenerative diseases such as Parkinson's and Alzheimer's. It is designed with scalability in mind: the same architecture applies to patient level EHR text, discharge summaries, and structured clinical databases.
 
 ---
 
@@ -27,7 +27,7 @@ emilyalsentzer/Bio_ClinicalBERT
         ↓
 Vector storage & retrieval (ChromaDB, cosine similarity)
         ↓
-Grounded answer generation (Groq — LLaMA 3.1 8B)
+Grounded answer generation (Groq LLaMA 3.1 8B)
         ↓
 Cited, source-grounded clinical answer
 ```
@@ -38,13 +38,13 @@ Cited, source-grounded clinical answer
 
 - **Source:** PubMed via NCBI Entrez API (no proprietary data, fully reproducible)
 - **Queries used for corpus construction:**
-  - `Parkinson's disease machine learning biomarkers`
-  - `Parkinson's disease electronic health records NLP`
-  - `Parkinson's disease multimodal data deep learning`
-  - `Alzheimer's disease clinical data harmonisation OMOP`
+  - Parkinson's disease machine learning biomarkers
+  - Parkinson's disease electronic health records NLP
+  - Parkinson's disease multimodal data deep learning
+  - Alzheimer's disease clinical data harmonisation OMOP
 - **Corpus size:** 500+ unique abstracts after deduplication by PMID
 - **Metadata retained:** PMID, title, publication year, source query
-- **No proprietary or patient-level data used** fully open and reproducible
+- No proprietary or patient-level data used fully open and reproducible
 
 ---
 
@@ -54,7 +54,7 @@ Cited, source-grounded clinical answer
 `emilyalsentzer/Bio_ClinicalBERT` was chosen over general-purpose sentence transformers (e.g. `all-MiniLM-L6-v2`) because it was pre-trained on MIMIC-III clinical notes. This gives it substantially better semantic alignment with medical terminology, clinical abbreviations, and disease-specific language critical for meaningful retrieval over biomedical text.
 
 ### Chunking strategy
-`RecursiveCharacterTextSplitter` with `chunk_size=400` and `chunk_overlap=50` tokens. The overlap is deliberately set to preserve clinical context across sentence boundaries a sentence describing a biomarker finding may be semantically incomplete without the preceding sentence establishing the patient cohort.
+`RecursiveCharacterTextSplitter` with `chunk_size=400` and `chunk_overlap=50` tokens. The overlap is deliberately set to preserve clinical context across sentence boundaries — a sentence describing a biomarker finding may be semantically incomplete without the preceding sentence establishing the patient cohort.
 
 ### Vector store: ChromaDB with cosine similarity
 Cosine similarity is used as the distance metric rather than Euclidean distance, as it is invariant to embedding magnitude more appropriate for comparing normalised sentence-level representations.
@@ -83,15 +83,13 @@ Five clinically targeted queries aligned with LCSB's research focus on neurodege
 
 Retrieval quality assessed using average cosine similarity at k=1, 3, and 5 across all test queries.
 
-| Query (truncated) | Avg similarity@1 | Avg similarity@3 | Avg similarity@5 |
+| Query | Avg similarity@1 | Avg similarity@3 | Avg similarity@5 |
 |---|---|---|---|
-| ML methods for Parkinson's progression... | — | — | — |
-| NLP on clinical notes for Parkinson's... | — | — | — |
-| Biomarkers for early Parkinson's detection... | — | — | — |
-| Multimodal data for Alzheimer's... | — | — | — |
-| Clinical data harmonisation challenges... | — | — | — |
-
-> *Fill in your similarity scores from the evaluation cell output before pushing to GitHub.*
+| ML methods for Parkinson's progression | 0.9348 | 0.9327 | 0.9320 |
+| NLP on clinical notes for Parkinson's | 0.9396 | 0.9384 | 0.9366 |
+| Biomarkers for early Parkinson's detection | 0.9380 | 0.9362 | 0.9337 |
+| Multimodal data for Alzheimer's | 0.9445 | 0.9441 | 0.9435 |
+| Clinical data harmonisation challenges | 0.9490 | 0.9450 | 0.9438 |
 
 A query semantic similarity heatmap is included (`query_similarity_heatmap.png`) showing the degree of semantic overlap between evaluation queries useful for identifying redundancy in query design.
 
@@ -110,7 +108,7 @@ A query semantic similarity heatmap is included (`query_similarity_heatmap.png`)
 
 ```
 clinical-rag-parkinsons/
-├── clinical_rag_parkinsons.ipynb   # Main notebook full pipeline end to end
+├── clinical_rag_parkinsons.ipynb   # Main notebook — full pipeline end to end
 ├── parkinsons_abstracts.csv        # Fetched and cleaned PubMed corpus
 ├── abstracts_by_year.png           # Corpus year distribution plot
 ├── query_similarity_heatmap.png    # Query embedding similarity heatmap
@@ -137,7 +135,7 @@ pip install -r requirements.txt
 ### 3. Add your Groq API key
 Get a free key at [console.groq.com](https://console.groq.com). Then either:
 - Set as environment variable: `export GROQ_API_KEY=your_key_here`
-- Or in Colab: add via Runtime > Secrets > `GROQ_API_KEY`
+- Or in Colab: add via **Runtime > Secrets > GROQ_API_KEY**
 
 ### 4. Run the notebook
 Open `clinical_rag_parkinsons.ipynb` in Jupyter or Google Colab and run cells in order.
@@ -163,16 +161,14 @@ seaborn
 
 ## Limitations & Next Steps
 
-- **Data scope:** Currently limited to PubMed abstracts. The next step is extending to **MIMIC-III discharge summaries** (PhysioNet access in progress) for patient level unstructured clinical text moving from literature retrieval to patient-level clinical question answering.
-- **Structured data integration:** Planned integration with **OMOP CDM** mapped structured variables alongside unstructured text, enabling hybrid retrieval across both modalities.
-- **Federated retrieval:** Future direction extending the ChromaDB retrieval layer to operate across distributed document stores in a privacy preserving manner, aligned with federated learning principles for multi-site clinical data.
+- **Data scope:** Currently limited to PubMed abstracts. The next step is extending to MIMIC-III discharge summaries (PhysioNet access in progress) for patient level unstructured clinical text moving from literature retrieval to patient-level clinical question answering.
+- **Structured data integration:** Planned integration with OMOP CDM mapped structured variables alongside unstructured text, enabling hybrid retrieval across both modalities.
+- **Federated retrieval:** Future direction extending the ChromaDB retrieval layer to operate across distributed document stores in a privacy-preserving manner, aligned with federated learning principles for multisite clinical data.
 - **Evaluation:** Similarity-based retrieval evaluation is a proxy metric. Ground truth QA evaluation (e.g. using BioASQ benchmarks) is a planned next step.
-- **Embedding model:** Bio_ClinicalBERT is an older BERT-based model. Replacing with `MedCPT` or `BioMedBERT-large` would likely improve retrieval quality for longer queries.
+- **Embedding model:** Bio_ClinicalBERT is an older BERT-based model. Replacing with MedCPT or BioMedBERT-large would likely improve retrieval quality for longer queries.
 
 ---
 
 ## Author
 
-**Shweta Debjit Sarkar**
-Independent researcher in clinical machine learning
-[GitHub](https://github.com/Shweta-Portfolio) · [LinkedIn](https://www.linkedin.com/in/shwetapooja/) · [Email](mailto:shweta.sarkar.academic@gmail.com)
+Shweta Debjit Sarkar — Independent researcher in clinical machine learning.
