@@ -171,12 +171,6 @@ seaborn
 
 ---
 
-## Relevance to Doctoral Research
-
-This project was built as a practical demonstration of skills directly relevant to doctoral research in clinical data science specifically the integration of NLP pipelines, semantic retrieval, and LLM-based generation over biomedical text. The architecture is designed to generalise to the kinds of clinical data environments described in LCSB's work: multimodal, heterogeneous, and requiring FAIR-compliant, privacy aware processing.
-
----
-
 ## Author
 
 **Shweta Debjit Sarkar**
